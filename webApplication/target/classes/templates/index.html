@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org" xmlns:p="http://primefaces.org/ui"
+ xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core">
+
+<head>
+
+<meta charset="ISO-8859-1">
+<title>First Thymeleaf Page</title>
+	<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}" />
+
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+</head>
+
+<body>
+
+	<!-- Bootstrap CSS -->
+	<!-- jQuery first, then Bootstrap JS. -->
+	<!-- Nav tabs -->
+
+	<div class="container-fluid">
+	
+<!--  menu ---------------------------------------------------------------------- -->
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="nav-item"><a class="nav-link active" href="#profile"
+			role="tab" data-toggle="tab">Customer</a></li>
+		<li class="nav-item"><a class="nav-link" href="#buzz" role="tab"
+			data-toggle="tab">Manager</a></li>
+		<li class="nav-item"><a class="nav-link" href="#configurator"
+			role="tab" data-toggle="tab">Configurator</a></li>
+	</ul>
+
+<!-- Tab panes ----------------------------------------------------------------------->
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane fade " id="profile">
+			<div class="alert alert-success" role="alert" th:text="${ message }"></div>
+			<div class="row upRegister">
+				<div class="col-sm-1">
+					<span class="badge badge-primary"> Add Customer</span>
+				</div>
+				<div class="col">
+<!---Formular new customer registration------------------------------- ------------------------>
+				
+					<form action="#" th:action="@{/createCustomer}" th:object="${form}"
+						method="post">
+						<div class="form-group">
+							<label for="name">Name</label>
+							 <input type="text" th:field="*{name}" /> <label for="surname">Surname</label>
+							  <input type="text" th:field="*{surname}" /> <label for="email">Email</label>
+							<input type="text" th:field="*{email}" /> <label for="phone">Phone</label>
+							<input type="text" th:field="*{phone}" /> <input type="submit" value="Register" />
+						</div>
+					</form>
+				</div>
+			</div>
+<!-- --------List of Customer------------------------------------------------------------------->
+			<div class="row">
+				<div class="col tableauCustomer">
+					<form action="#" th:action="@{/deleteCustomer}"
+						th:object="${formDelete}" method="post">
+
+						<table class="table table-striped table-dark">
+							<thead>
+								<tr>
+									<th scope="col">Id</th>
+									<th scope="col">Action</th>
+									<th scope="col">Name</th>
+									<th scope="col">Surname</th>
+									<th scope="col">Email</th>
+									<th scope="col">Phone</th>
+									<th scope="col">TrackerId</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="c : ${listCustomer} ">
+									<th scope="row" th:text="${c.id}"></th>
+									<td><input type="checkbox" th:field="*{id}"
+										th:value="${c.id}" />
+										<button type="submit" class="btn btn-primary btn-sm">Delete</button>
+									</td>
+									<td th:text="${c.name}"></td>
+									<td th:text="${c.surname}"></td>
+									<td th:text="${c.email}"></td>
+									<td th:text="${c.phone}"></td>
+									<td th:text="${c.trackerId}"></td>
+									
+								</tr>
+							</tbody>
+						</table>
+					</form>
+
+				</div>
+			</div>
+			
+		</div>
+
+		<div role="tabpanel" class="tab-pane fade" id="buzz">
+			<div th:replace="manager :: managerTab">...</div>
+		</div>
+
+		
+		
+		<div role="tabpanel" class="tab-pane fade" id="configurator">Welcome !
+					<div th:replace="configurator :: configuratorTab">...</div>
+		</div>
+		
+	</div>
+
+ 
+
+        <p:spinner />
+
+
+
+</div>
+
+
+</body>
+<script type="text/javascript"
+	th:src="@{/webjars/jquery/3.4.1/dist/jquery.min.js/}"></script>
+	<script type="text/javascript"
+	th:src="@{/webjars/popper.js/1.14.3/popper.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.min.js}"></script>
+
+</html>

@@ -1,0 +1,26 @@
+<div class="container-fluid" th:fragment="managerTab">
+
+
+<form action="#" th:action="@{/order}" th:object="${formOrdering}" method="post">
+
+	<select th:field="*{trackerIdCustomer}">
+  		<option 
+  			th:each="c : ${listCustomer} " 
+          	th:value="${c.trackerId}" 
+          	th:text="${c.name}">Customer
+  		</option>
+  	</select>
+  	
+  	
+						
+
+
+
+
+
+
+
+
+
+</form>
+</div>

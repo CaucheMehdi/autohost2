@@ -1,0 +1,35 @@
+<div class="container-fluid" th:fragment="configuratorTab">
+<form action="#" th:action="@{/order}" th:object="${formOrdering}" method="post">
+
+<!--  Pool Configurator ex: nginx + reddis + lxc  -->
+
+<!-- Select instance available -->
+
+<!-- Select configuration to be done  -->
+
+
+<!-- Hosting or provider -->
+
+<!-- if provider then which plan to host on it -->
+
+
+
+
+
+
+<select th:field="*{trackerIdCustomer}">
+  <option th:each="c : ${listCustomer} " 
+          th:value="${c.trackerId}" 
+          th:text="${c.name}">Customer</option>
+          
+</select>
+
+
+
+
+
+
+
+
+</form>
+</div>

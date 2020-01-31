@@ -1,0 +1,55 @@
+body {
+  padding : 10px ;
+  
+}
+
+#exTab1 .tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+#exTab2 h3 {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+/* remove border radius for the tab */
+
+#exTab1 .nav-pills > li > a {
+  border-radius: 0;
+}
+
+/* change border radius for the tab , apply corners on top*/
+
+#exTab3 .nav-pills > li > a {
+  border-radius: 4px 4px 0 0 ;
+}
+
+#exTab3 .tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+.upRegister {
+	padding-top: 1em;
+	background-color: #f2f2f2;
+	margin-top: 1em;
+	/* margin-bottom: 1em; */
+	margin-left: 2em;
+	margin-right: 2em;
+}
+
+.tableauCustomer {
+	background-color: #fbfafa;
+	margin-left: 2em;
+	margin-right: 2em;
+}
+.hidden {
+	display: none;
+}
+
+
+ 
