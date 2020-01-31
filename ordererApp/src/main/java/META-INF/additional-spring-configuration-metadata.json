@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "provscaleway.token",
+    "type": "java.lang.String",
+    "description": "A description for 'provscaleway.token'"
+  },
+  {
+    "name": "provscaleway.baseurl",
+    "type": "java.lang.String",
+    "description": "A description for 'provscaleway.baseurl'"
+  },
+  {
+    "name": "vutlr.token",
+    "type": "java.lang.String",
+    "description": "A description for 'vutlr.token'"
+  },
+  {
+    "name": "vultr.token",
+    "type": "java.lang.String",
+    "description": "A description for 'vultr.token'"
+  },
+  {
+    "name": "vultr.baseurl",
+    "type": "java.lang.String",
+    "description": "A description for 'vultr.baseurl'"
+  },
+  {
+    "name": "vultr.ansible",
+    "type": "java.lang.String",
+    "description": "A description for 'vultr.ansible'"
+  }
+]}
