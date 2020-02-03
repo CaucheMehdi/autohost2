@@ -48,7 +48,8 @@ public class ManagerRestController {
         // the job is finished
         // send signal that indicates to check ressource
         if (ressource != null && !ressource.getApplication().isEmpty() && !ressource.getOs().isEmpty() && !ressource.getPlace().isEmpty()
-                        && !ressource.getProvider().isEmpty() && !ressource.getSize().isEmpty() && !ressource.getClientTid().isEmpty()) {
+                        && !ressource.getProvider().isEmpty() && !ressource.getSize().isEmpty() && !ressource.getClientTid().isEmpty()
+                        && !ressource.getTrackingId().isEmpty()) {
 
             CustomSpringEvent checkRessource = new CustomSpringEvent(this, CustomSpringEvent.Signal.CHECK_RESSOURCE_AVAILABILITY, ressource);
             applicationEventPublisher.publishEvent(checkRessource);

@@ -3,10 +3,10 @@
 
 <form action="#" th:action="@{/order}" th:object="${formOrdering}" method="post">
 
-	<select th:field="*{trackerIdCustomer}">
+	<select th:field="*{clientTid}">
   		<option 
   			th:each="c : ${listCustomer} " 
-          	th:value="${c.trackerId}" 
+          	th:value="${c.trackingId}" 
           	th:text="${c.name}">Customer
   		</option>
   	</select>

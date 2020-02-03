@@ -1,23 +1,18 @@
 package com.autohost.managerApp.job;
 
-import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import com.autohost.managerApp.exitstatus.CustomStatus;
 import com.autohost.managerApp.tasklet.CheckAvailabilityRessourceTasklet;
 import com.autohost.managerApp.tasklet.OrderNewInstanceTasklet;
 import com.autohost.managerApp.tasklet.SendToClientTasklet;
-
 
 /**
  * Try to find a ressource with the given parameter in the context
@@ -31,57 +26,47 @@ import com.autohost.managerApp.tasklet.SendToClientTasklet;
 @EnableBatchProcessing
 public class RessourceDisposerJob {
 
-	@Autowired
-	 private JobBuilderFactory 						jobBuilderFactory;
-	 @Autowired
-	 private StepBuilderFactory 					stepBuilderFactory;
-	 @Autowired 
-	 private CheckAvailabilityRessourceTasklet		ressourceCheckavailabilityRessourceTasklet;
-	 @Autowired 
-	 private SendToClientTasklet 					sendToClientTasklet;
-	 @Autowired
-	 private OrderNewInstanceTasklet 				ordernewinstanceTasklet;
+    @Autowired
+    private JobBuilderFactory                 jobBuilderFactory;
+    @Autowired
+    private StepBuilderFactory                stepBuilderFactory;
+    @Autowired
+    private CheckAvailabilityRessourceTasklet ressourceCheckavailabilityRessourceTasklet;
+    @Autowired
+    private SendToClientTasklet               sendToClientTasklet;
+    @Autowired
+    private OrderNewInstanceTasklet           ordernewinstanceTasklet;
 
-	 
-	 @Bean(name="getInstance")
-	    public Job job() {
-	    	return jobBuilderFactory.get("job")
-	                .start(checkRessourceAvalaibleStep())
-	                .on(CustomStatus.RESSOURCEFOUND).to(sendRessourceToCustomerAppStep())
-	                .from(checkRessourceAvalaibleStep()).on(CustomStatus.RESSOURCENOTFOUND).to(orderNewInstanceStep())
-	                .end()
-	                .build();
-	    }
-	 
-	
-	 /**
-	  * Check if ressource requested is available
-	  * @return
-	  */
-		@Bean
-	    protected Step checkRessourceAvalaibleStep() {
-	        return stepBuilderFactory.get("step1")
-	            .tasklet(ressourceCheckavailabilityRessourceTasklet)
-	                .build();
-	    }
-		
-		/**
-		 * Send ressource to customer App
-		 * @return
-		 */
-	    protected Step sendRessourceToCustomerAppStep() {
-	    	 return stepBuilderFactory.get("step2")
-	 	            .tasklet(sendToClientTasklet)
-	 	                .build();
-			}
-	    
-	    /**
-	     * Ask to order ressource
-	     * 
-	     */protected Step orderNewInstanceStep() {
-	    	 return stepBuilderFactory.get("step3")
-		 	            .tasklet(ordernewinstanceTasklet)
-		 	                .build();
-				}
-	    
-	}
+    @Bean(name = "getInstance")
+    public Job job() {
+        return jobBuilderFactory.get("job").start(checkRessourceAvalaibleStep()).on(CustomStatus.RESSOURCEFOUND).to(sendRessourceToCustomerAppStep())
+                        .from(checkRessourceAvalaibleStep()).on(CustomStatus.RESSOURCENOTFOUND).to(orderNewInstanceStep()).from(orderNewInstanceStep())
+                        .on(CustomStatus.RESSOURCEORDERED).to(sendRessourceToCustomerAppStep()).end().build();
+    }
+
+    /**
+     * Check if ressource requested is available
+     * @return
+     */
+    @Bean
+    protected Step checkRessourceAvalaibleStep() {
+        return stepBuilderFactory.get("step1").tasklet(ressourceCheckavailabilityRessourceTasklet).build();
+    }
+
+    /**
+     * Send ressource to customer App
+     * @return
+     */
+    protected Step sendRessourceToCustomerAppStep() {
+        return stepBuilderFactory.get("step2").tasklet(sendToClientTasklet).build();
+    }
+
+    /**
+     * Ask to order ressource
+     *
+     */
+    protected Step orderNewInstanceStep() {
+        return stepBuilderFactory.get("step3").tasklet(ordernewinstanceTasklet).build();
+    }
+
+}

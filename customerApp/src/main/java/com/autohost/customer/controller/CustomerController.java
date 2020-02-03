@@ -3,6 +3,7 @@ package com.autohost.customer.controller;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -63,7 +64,7 @@ public class CustomerController {
     @CrossOrigin(origins = "http://10.244.232.246:4200")
     @PostMapping("/customer/create")
     public String createCustomer(@RequestBody CustomerDTO customer) {
-        logger.info("receiveon /customer/create DTO {}", customer);
+        logger.info("received at /customer/create DTO {}", customer);
         // Check if any value is null
         if (customer.getName() == null || customer.getSurname() == null || customer.getPhone() == null || customer.getEmail() == null) {
             logger.info("At least one mandatory value is null");
@@ -131,8 +132,8 @@ public class CustomerController {
      * @throws IOException
      * @throws ClientProtocolException
      */
-    @PostMapping("/customer/post/order")
-    public ResponseEntity<RessourceDTO> askPlanForCustomer(@RequestParam RessourceDTO res) throws ClientProtocolException, IOException {
+    @PostMapping("/customer/post/ressource")
+    public ResponseEntity<RessourceDTO> askPlanForCustomer(@RequestBody RessourceDTO res) throws ClientProtocolException, IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         // verify if user exist
@@ -141,6 +142,7 @@ public class CustomerController {
         if (c != null && res != null) {
             // Génère un code de suivi (trackingId) et sauvegarde la commande du client
             res.setTrackingId(RandomStringUtils.random(30));
+            res.setEvents(new HashMap<LocalTime, String>());
             res.getEvents().put(LocalTime.now(), UrlEndpoint.CUSTOMER_POST_ORDER);
             res.setStatus(Status.PENDING);
             Ressource r = new Ressource(res, c);
@@ -171,6 +173,7 @@ public class CustomerController {
                 logger.info("received ressource from manager : {}", res);
                 Ressource r = ressourceRepo.findByTrackingId(res.getTrackingId());
                 r.setIp(res.getIp());
+                ressourceRepo.save(r);
             }
         }
         return "OK";

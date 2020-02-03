@@ -3,12 +3,12 @@ package com.autohost.managerApp.tasklet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -44,7 +44,7 @@ public class OrderNewInstanceTasklet implements Tasklet, StepExecutionListener {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         // retrieve ressource from step parameters
-        ExecutionContext e = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
+        JobParameters e = chunkContext.getStepContext().getStepExecution().getJobExecution().getJobParameters();
         RessourceDTO res = new RessourceDTO();
         res.setTrackingId(e.getString("trackerId"));
         res.setIp(e.getString("ip"));

@@ -55,7 +55,8 @@ public class ListenAndStartJob implements ApplicationListener<CustomSpringEvent>
         JobParameters paramaters = new JobParametersBuilder().addLong("time", System.currentTimeMillis()).addString("size", event.getRessource().getSize())
                         .addString("os", event.getRessource().getOs()).addString("configuration", event.getRessource().getApplication())
                         .addString("provider", event.getRessource().getProvider()).addString("place", event.getRessource().getPlace())
-                        .addString("trackerId", event.getRessource().getTrackingId()).toJobParameters();
+                        .addString("trackerId", event.getRessource().getTrackingId()).addString("clientId", event.getRessource().getClientTid())
+                        .toJobParameters();
 
         JobExecution execution = jobLauncher.run(ressourceDisposerjob, paramaters);
         return execution.getExitStatus();

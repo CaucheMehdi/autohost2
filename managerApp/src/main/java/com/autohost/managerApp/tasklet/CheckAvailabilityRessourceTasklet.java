@@ -74,11 +74,6 @@ public class CheckAvailabilityRessourceTasklet implements Tasklet, StepExecution
         } else {
             // put in the context the ressource found
             ExecutionContext e = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
-            e.put("size", null);
-            e.put("os", null);
-            e.put("configuration", null);
-            e.put("provider", null);
-            e.put("place", null);
 
             e.put("size", ressourceAvailable.getSize());
             e.put("os", ressourceAvailable.getOs());
@@ -86,6 +81,7 @@ public class CheckAvailabilityRessourceTasklet implements Tasklet, StepExecution
             e.put("provider", ressourceAvailable.getProvider());
             e.put("place", ressourceAvailable.getPlace());
             e.put("ip", ressourceAvailable.getIp());
+            e.put("trackerId", ressourceAvailable.getTrackerId());
 
         }
         return RepeatStatus.FINISHED;

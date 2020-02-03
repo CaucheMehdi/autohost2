@@ -5,6 +5,7 @@ public class CustomerDTO {
     private String surname;
     private String phone;
     private String email;
+    private String pwd;
     private String trackingId;
 
     public CustomerDTO() {
@@ -24,6 +25,20 @@ public class CustomerDTO {
     public CustomerDTO(String trackerId) {
         // TODO Auto-generated constructor stub
         this.trackingId = trackerId;
+    }
+
+    /**
+     * @return the pwd
+     */
+    public String getPwd() {
+        return pwd;
+    }
+
+    /**
+     * @param pwd the pwd to set
+     */
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     /**
