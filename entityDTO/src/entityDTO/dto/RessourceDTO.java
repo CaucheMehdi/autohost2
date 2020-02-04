@@ -1,4 +1,4 @@
-package entityDTO;
+package entityDTO.dto;
 
 import java.io.Serializable;
 import java.time.LocalTime;

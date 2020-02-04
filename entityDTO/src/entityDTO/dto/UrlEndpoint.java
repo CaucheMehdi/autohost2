@@ -1,4 +1,4 @@
-package entityDTO;
+package entityDTO.dto;
 
 public class UrlEndpoint {
 
