@@ -31,9 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.autohost.repository.ServiceCustomerRepository;
-import com.autohost.repository.ServiceRessourceRepository;
-
 import entityDTO.db.Customer;
 import entityDTO.db.Ressource;
 import entityDTO.dto.CustomerDTO;
@@ -46,10 +43,10 @@ import entityDTO.utils.DtoConverter;
 public class CustomerController {
 
     @Autowired
-    private ServiceCustomerRepository customerRepo;
+    private ServiceCustomerRepository cusRepo;
 
     @Autowired
-    private ServiceRessourceRepository ressourceRepo;
+    private ServiceRessourceRepository resRepo;
 
     @Value("${url.manager}")
     private String              urlBaseManager;
@@ -75,14 +72,14 @@ public class CustomerController {
                         .isEmpty()) {
             logger.info("At least one mandatory value is empty");
             return "BLANK_VALUE";
-        } else if (customerRepo.existsByEmail(customerDTO.getEmail()) || customerRepo.existsByPhone(customerDTO.getPhone())) {
+        } else if (cusRepo.existsByEmail(customerDTO.getEmail()) || cusRepo.existsByPhone(customerDTO.getPhone())) {
             logger.info("Customer already existing in db");
             return "CUSTOMER_FOUND_IN_DB";
         } else {
             Customer c = DtoConverter.customerDtoToCustomer(customerDTO);
             // setting tracking number
             c.setTrackingId(RandomStringUtils.randomAlphanumeric(30));
-            customerRepo.save(c);
+            cusRepo.save(c);
             logger.info("saving new customer : {}", c);
             // return unique identifier of this customer
             return c.getTrackingId();
@@ -94,8 +91,8 @@ public class CustomerController {
         String message = "ID_IS_NULL";
 
         if (c != null) {
-            if (customerRepo.existByTrackingId(c.getTrackingId())) {
-                customerRepo.deleteByTrackerId(c.getTrackingId());
+            if (cusRepo.existByTrackingId(c.getTrackingId())) {
+                cusRepo.deleteByTrackerId(c.getTrackingId());
                 logger.info("Customer deleted db : {}", c);
                 message = "DELETED";
             } else {
@@ -109,7 +106,7 @@ public class CustomerController {
     @CrossOrigin(origins = "http://10.244.232.246:4200")
     @GetMapping("/customer/getall")
     public List<CustomerDTO> listCustomer() {
-        List<Customer> lc = customerRepo.findAll();
+        List<Customer> lc = cusRepo.findAll();
         List<CustomerDTO> lcdto = new ArrayList<>();
         for (Customer c : lc) {
             CustomerDTO cdto = DtoConverter.customerToCustomerDto(c);
@@ -138,7 +135,7 @@ public class CustomerController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         // verify if user exist
-        Customer c = customerRepo.findByTrackingId(res.getClientTid());
+        Customer c = cusRepo.findByTrackingId(res.getClientTid());
         // verify if plan exist
         if (c != null && res != null) {
             // Génère un code de suivi (trackingId) et sauvegarde la commande du client
@@ -147,7 +144,7 @@ public class CustomerController {
             res.getEvents().put(LocalTime.now(), UrlEndpoint.CUSTOMER_POST_ORDER);
             res.setStatus(Status.PENDING);
             Ressource r = DtoConverter.ressourceDtoToRessource(res);
-            ressourceRepo.save(r);
+            resRepo.save(r);
 
             // envoie la commande au manager
             RestTemplate restTemplate = new RestTemplate();
@@ -169,12 +166,12 @@ public class CustomerController {
 
     @PostMapping("/customer/receive/order")
     public String receivePlanForCustomer(@RequestParam RessourceDTO res) {
-        if (res != null && res.getTrackingId() != null && res.getIp() != null) {
+        if (res != null || res.getTrackingId() != null || res.getIp() != null) {
             if (!res.getTrackingId().isEmpty() && !res.getIp().isEmpty()) {
                 logger.info("received ressource from manager : {}", res);
-                Ressource r = ressourceRepo.findByTrackingId(res.getTrackingId());
+                Ressource r = resRepo.findByTrackingId(res.getTrackingId());
                 r.setIp(res.getIp());
-                ressourceRepo.save(r);
+                resRepo.save(r);
             }
         }
         return "OK";
