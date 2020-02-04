@@ -41,7 +41,12 @@ public class RessourceDisposerJob {
     public Job job() {
         return jobBuilderFactory.get("job").start(checkRessourceAvalaibleStep()).on(CustomStatus.RESSOURCEFOUND).to(sendRessourceToCustomerAppStep())
                         .from(checkRessourceAvalaibleStep()).on(CustomStatus.RESSOURCENOTFOUND).to(orderNewInstanceStep()).from(orderNewInstanceStep())
-                        .on(CustomStatus.RESSOURCEORDERED).to(sendRessourceToCustomerAppStep()).end().build();
+                        .on(CustomStatus.RESSOURCEORDERED).to(sendRessourceToConfigurerAppStep()).end().build();
+    }
+
+    private Step sendRessourceToConfigurerAppStep() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**

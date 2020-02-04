@@ -31,24 +31,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.autohost.customer.entity.Customer;
-import com.autohost.customer.entity.Ressource;
-import com.autohost.repository.CustomerRepository;
-import com.autohost.repository.RessourceRepository;
+import com.autohost.repository.ServiceCustomerRepository;
+import com.autohost.repository.ServiceRessourceRepository;
 
-import entityDTO.CustomerDTO;
-import entityDTO.RessourceDTO;
-import entityDTO.Status;
-import entityDTO.UrlEndpoint;
+import entityDTO.db.Customer;
+import entityDTO.db.Ressource;
+import entityDTO.dto.CustomerDTO;
+import entityDTO.dto.RessourceDTO;
+import entityDTO.dto.Status;
+import entityDTO.dto.UrlEndpoint;
+import entityDTO.utils.DtoConverter;
 
 @RestController
 public class CustomerController {
 
     @Autowired
-    private CustomerRepository customerRepo;
+    private ServiceCustomerRepository customerRepo;
 
     @Autowired
-    private RessourceRepository ressourceRepo;
+    private ServiceRessourceRepository ressourceRepo;
 
     @Value("${url.manager}")
     private String              urlBaseManager;
@@ -63,27 +64,28 @@ public class CustomerController {
      */
     @CrossOrigin(origins = "http://10.244.232.246:4200")
     @PostMapping("/customer/create")
-    public String createCustomer(@RequestBody CustomerDTO customer) {
-        logger.info("received at /customer/create DTO {}", customer);
+    public String createCustomer(@RequestBody CustomerDTO customerDTO) {
+        logger.info("received at /customer/create DTO {}", customerDTO);
         // Check if any value is null
-        if (customer.getName() == null || customer.getSurname() == null || customer.getPhone() == null || customer.getEmail() == null) {
+        if (customerDTO.getName() == null || customerDTO.getSurname() == null || customerDTO.getPhone() == null || customerDTO.getEmail() == null) {
             logger.info("At least one mandatory value is null");
             return "NULL_VALUE";
             // check if this email is this customer is already know (by email or phone)
-        } else if (customer.getName().isEmpty() || customer.getSurname().isEmpty() || customer.getPhone().isEmpty() || customer.getEmail().isEmpty()) {
+        } else if (customerDTO.getName().isEmpty() || customerDTO.getSurname().isEmpty() || customerDTO.getPhone().isEmpty() || customerDTO.getEmail()
+                        .isEmpty()) {
             logger.info("At least one mandatory value is empty");
             return "BLANK_VALUE";
-        } else if (customerRepo.existsByEmail(customer.getEmail()) || customerRepo.existsByPhone(customer.getPhone())) {
+        } else if (customerRepo.existsByEmail(customerDTO.getEmail()) || customerRepo.existsByPhone(customerDTO.getPhone())) {
             logger.info("Customer already existing in db");
             return "CUSTOMER_FOUND_IN_DB";
         } else {
-            Customer c = new Customer(customer.getName(), customer.getSurname(), customer.getPhone(), customer.getEmail());
+            Customer c = DtoConverter.customerDtoToCustomer(customerDTO);
             // setting tracking number
-            c.setTrackerId(RandomStringUtils.randomAlphanumeric(30));
+            c.setTrackingId(RandomStringUtils.randomAlphanumeric(30));
             customerRepo.save(c);
             logger.info("saving new customer : {}", c);
             // return unique identifier of this customer
-            return c.getTrackerId();
+            return c.getTrackingId();
         }
     }
 
@@ -92,7 +94,7 @@ public class CustomerController {
         String message = "ID_IS_NULL";
 
         if (c != null) {
-            if (customerRepo.existsByTrackerId(c.getTrackingId())) {
+            if (customerRepo.existByTrackingId(c.getTrackingId())) {
                 customerRepo.deleteByTrackerId(c.getTrackingId());
                 logger.info("Customer deleted db : {}", c);
                 message = "DELETED";
@@ -110,9 +112,8 @@ public class CustomerController {
         List<Customer> lc = customerRepo.findAll();
         List<CustomerDTO> lcdto = new ArrayList<>();
         for (Customer c : lc) {
-            CustomerDTO cdto = new CustomerDTO(c.getName(), c.getSurname(), c.getPhone(), c.getEmail(), c.getTrackerId());
+            CustomerDTO cdto = DtoConverter.customerToCustomerDto(c);
             lcdto.add(cdto);
-
         }
         // renvoi la liste des clientsDTO
         return lcdto;
@@ -137,7 +138,7 @@ public class CustomerController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         // verify if user exist
-        Customer c = customerRepo.findByTrackerId(res.getClientTid());
+        Customer c = customerRepo.findByTrackingId(res.getClientTid());
         // verify if plan exist
         if (c != null && res != null) {
             // Génère un code de suivi (trackingId) et sauvegarde la commande du client
@@ -145,7 +146,7 @@ public class CustomerController {
             res.setEvents(new HashMap<LocalTime, String>());
             res.getEvents().put(LocalTime.now(), UrlEndpoint.CUSTOMER_POST_ORDER);
             res.setStatus(Status.PENDING);
-            Ressource r = new Ressource(res, c);
+            Ressource r = DtoConverter.ressourceDtoToRessource(res);
             ressourceRepo.save(r);
 
             // envoie la commande au manager

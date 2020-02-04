@@ -14,8 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import entityDTO.RessourceDTO;
-import entityDTO.UrlEndpoint;
+import entityDTO.dto.RessourceDTO;
+import entityDTO.dto.UrlEndpoint;
 
 @Component
 public class SendToManagerTasklet implements Tasklet, StepExecutionListener {

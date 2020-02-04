@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autohost.managerApp.listener.CustomSpringEvent;
 
-import entityDTO.RessourceDTO;
+import entityDTO.dto.RessourceDTO;
 
 @RestController
 public class ManagerRestController {

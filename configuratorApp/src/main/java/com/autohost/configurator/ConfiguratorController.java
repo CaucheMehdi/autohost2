@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autohost.configurator.repository.ConfigurationRepository;
 
-import entityDTO.RessourceDTO;
+import entityDTO.dto.RessourceDTO;
 
 @RestController
 public class ConfiguratorController {
@@ -35,8 +35,13 @@ public class ConfiguratorController {
     public void configureInstance(@RequestBody RessourceDTO ressource)
                     throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 
-        JobParameters parameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis()).addString("configuration", ressource.getApplication())
-                        .addString("ip", ressource.getIp()).addString("os", ressource.getOs()).addString("pwd", ressource.getPwd()).toJobParameters();
+        JobParameters parameters = new JobParametersBuilder()
+                        .addLong("time", System.currentTimeMillis())
+                        .addString("configuration", ressource.getApplication())
+                        .addString("ip", ressource.getIp())
+                        .addString("os", ressource.getOs())
+                        .addString("pwd", ressource.getPwd())
+                        .toJobParameters();
         jobLauncher.run(mainJob, parameters);
 
     }

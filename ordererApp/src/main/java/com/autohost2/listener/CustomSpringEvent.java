@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.springframework.context.ApplicationEvent;
 
-import entityDTO.RessourceDTO;
+import entityDTO.dto.RessourceDTO;
 
 public class CustomSpringEvent extends ApplicationEvent implements Serializable {
     /**

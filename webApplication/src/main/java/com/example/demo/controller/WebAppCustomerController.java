@@ -27,9 +27,9 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import entityDTO.CustomerDTO;
-import entityDTO.RessourceDTO;
-import entityDTO.UrlEndpoint;
+import entityDTO.dto.CustomerDTO;
+import entityDTO.dto.RessourceDTO;
+import entityDTO.dto.UrlEndpoint;
 
 @Controller
 public class WebAppCustomerController {

@@ -6,8 +6,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
-import entityDTO.CustomerDTO;
-import entityDTO.RessourceDTO;
+import entityDTO.dto.CustomerDTO;
+import entityDTO.dto.RessourceDTO;
 
 @Component
 public class Tools {

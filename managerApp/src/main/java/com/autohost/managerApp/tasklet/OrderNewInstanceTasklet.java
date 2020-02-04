@@ -20,8 +20,8 @@ import org.springframework.web.client.RestTemplate;
 import com.autohost.managerApp.entity.Ressource;
 import com.autohost.managerApp.repository.RessourceRepository;
 
-import entityDTO.RessourceDTO;
-import entityDTO.UrlEndpoint;
+import entityDTO.dto.RessourceDTO;
+import entityDTO.dto.UrlEndpoint;
 
 @Component
 public class OrderNewInstanceTasklet implements Tasklet, StepExecutionListener {
