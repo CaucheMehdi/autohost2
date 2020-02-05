@@ -67,7 +67,7 @@ public class WebAppCustomerController {
         // Endpoint for create customer (CustomerApp)
         // TODO property should be set in properties file
         logger.info("STARTING PROCESSING FORM");
-        String response = restRequest(form, UrlEndpoint.CUSTOMER_CREATE_CUSTOMER);
+        String response = restRequest(form, UrlEndpoint.CUSTOMER_CREATE_CUSTOMER_ENDPOINT);
         // setting the message for the view
         String message = "";
         switch (response) {
@@ -93,7 +93,7 @@ public class WebAppCustomerController {
     @PostMapping("/deleteCustomer")
     public String formSubmitDeleteCustomer(@ModelAttribute CustomerDTO form, Model model) throws ClientProtocolException, IOException {
         logger.info("STARTING PROCESSING FORM");
-        String response = restRequest(form, UrlEndpoint.CUSTOMER_DELETE_CUSTOMER);
+        String response = restRequest(form, UrlEndpoint.CUSTOMER_DELETE_CUSTOMER_ENDPOINT);
         model = addAttributeToView(model, response);
         return MAIN_VIEW;
     }

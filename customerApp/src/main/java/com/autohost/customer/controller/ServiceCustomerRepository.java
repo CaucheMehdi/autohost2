@@ -14,10 +14,8 @@ import entityDTO.dto.UrlEndpoint;
 @Component
 public class ServiceCustomerRepository {
 
-    private static final String REST_URL_CUSTOMER = UrlEndpoint.REST_REPO_CUSTOMER;
-
     public boolean existsByEmail(String email) {
-        String url = REST_URL_CUSTOMER + "/search/byEmail?email=" + email;
+        String url = UrlEndpoint.REST_CUSTOMER_SEARCH_BY_EMAIL_ENDPOINT + email;
         ResponseEntity<CustomerDTO> response = getRequest(url);
         if (response.getBody() == null) {
             return false;
@@ -48,7 +46,7 @@ public class ServiceCustomerRepository {
 
     public boolean save(CustomerDTO c) {
         // TODO Auto-generated method stub
-        String url = REST_URL_CUSTOMER;
+        String url = REST_URL_CUSTOMER + "/save";
         ResponseEntity<CustomerDTO> r = postRequest(url, c);
         if (r.getBody() == null) {
             return false;
@@ -65,7 +63,7 @@ public class ServiceCustomerRepository {
     }
 
     public void deleteByTrackerId(String trackingId) {
-        String url = UrlEndpoint.REST_REPO + "/customer/delete";
+        String url = UrlEndpoint.REST_REPO_ROOT + "/customer/delete";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(url, trackingId);
     }

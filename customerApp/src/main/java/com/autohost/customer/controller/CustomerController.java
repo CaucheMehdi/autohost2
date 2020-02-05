@@ -57,7 +57,7 @@ public class CustomerController {
      * @return
      */
     @CrossOrigin(origins = "http://10.244.232.246:4200")
-    @PostMapping("/customer/create")
+    @PostMapping(UrlEndpoint.CREATE_MAPPING)
     public String createCustomer(@RequestBody CustomerDTO customerDTO) {
         logger.info("received at /customer/create DTO {}", customerDTO);
         // Check if any value is null
@@ -82,7 +82,7 @@ public class CustomerController {
         }
     }
 
-    @PostMapping("/customer/delete")
+    @PostMapping(UrlEndpoint.DELETE_MAPPING)
     public String deleteCustomer(@RequestBody CustomerDTO c) {
         String message = "ID_IS_NULL";
 
@@ -129,7 +129,6 @@ public class CustomerController {
             // Génère un code de suivi (trackingId) et sauvegarde la commande du client
             res.setTrackingId(RandomStringUtils.random(30));
             res.setEvents(new HashMap<LocalTime, String>());
-            res.getEvents().put(LocalTime.now(), UrlEndpoint.CUSTOMER_POST_ORDER);
             res.setStatus(Status.PENDING);
             resRepo.save(res);
 

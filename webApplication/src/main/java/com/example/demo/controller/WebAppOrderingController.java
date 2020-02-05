@@ -44,7 +44,7 @@ public class WebAppOrderingController {
         String response = "NOT_ACCEPTED";
         if (order != null && order.getApplication() != null && order.getClientTid() != null && order.getOs() != null && order.getPlace() != null
                         && order.getProvider() != null && order.getSize() != null) {
-            RessourceDTO neworder = restRequest(order, UrlEndpoint.CUSTOMER_POST_ORDER);
+            RessourceDTO neworder = restRequest(order, UrlEndpoint.CUSTOMER_POST_ORDER_ENDPOINT);
         }
         // adding all data for the view
         addAttributeToView(model, response);
