@@ -5,22 +5,20 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.7.RELEASE</version>
+		<version>2.1.9.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.autohost</groupId>
-	<artifactId>ordererApp</artifactId>
+	<artifactId>managerApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>orderer</name>
-	<description>orderer project</description>
-	<packaging>jar</packaging>
+	<name>manager</name>
+	<description>ressource manager</description>
 
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
+<dependencies>
 
-	<dependencies>
-	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
@@ -59,25 +57,18 @@
 			<artifactId>spring-batch-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		
-		<dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-databind</artifactId>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.9</version>
 </dependency>
-		<dependency>
-			<groupId>entityDTO</groupId>
-			<artifactId>entityDTO</artifactId>
-			<version>1.0</version>
-		</dependency>
-	</dependencies>
+	<dependency>
+		<groupId>entityDTO</groupId>
+		<artifactId>entityDTO</artifactId>
+		<version>1.0</version>
+	</dependency>
+</dependencies>
 
 	<build>
 		<plugins>

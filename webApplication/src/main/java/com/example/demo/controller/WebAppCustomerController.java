@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
@@ -28,6 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import entityDTO.dto.CustomerDTO;
+import entityDTO.dto.ListCustomerDto;
 import entityDTO.dto.RessourceDTO;
 import entityDTO.dto.UrlEndpoint;
 
@@ -114,7 +113,7 @@ public class WebAppCustomerController {
         model.addAttribute("formOrdering", new RessourceDTO());
 
         // adding Customer List for the view listClient.html
-        model.addAttribute("listCustomer", getAllCustomer());
+        model.addAttribute("listCustomer", getAllCustomer().getListCustomerDto());
         // adding message to shown for the view listClient.html
         model.addAttribute("message", message);
         return model;
@@ -127,12 +126,12 @@ public class WebAppCustomerController {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    private List<CustomerDTO> getAllCustomer() throws ClientProtocolException, IOException {
+    private ListCustomerDto getAllCustomer() throws ClientProtocolException, IOException {
         CloseableHttpClient client = HttpClients.createDefault();
         CloseableHttpResponse response = client.execute(new HttpGet("http://localhost:8889/customer/getall"));
         String json = EntityUtils.toString(response.getEntity());
         logger.info(json);
-        return Arrays.asList(mapper.readValue(json, CustomerDTO[].class));
+        return mapper.readValue(json, ListCustomerDto.class);
     }
 
     /**

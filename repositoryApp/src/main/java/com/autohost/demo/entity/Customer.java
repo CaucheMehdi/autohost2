@@ -23,11 +23,6 @@ public class Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long              id;
 
-    public Customer() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
     /**
      * @return the serialversionuid
      */
@@ -117,6 +112,20 @@ public class Customer implements Serializable {
      */
     public void setTrackingId(String trackingId) {
         this.trackingId = trackingId;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }

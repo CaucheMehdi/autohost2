@@ -5,15 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import entityDTO.db.Ressource;
+import entityDTO.dto.RessourceDTO;
 import entityDTO.dto.UrlEndpoint;
 
 @Service
 public class ServiceRessourceRepository {
 
-    public boolean save(Ressource c) {
+    public boolean save(RessourceDTO c) {
         String url = "http://10.0.1.241:9900/customer";
-        ResponseEntity<Ressource> r = postRequest(url, c);
+        ResponseEntity<RessourceDTO> r = postRequest(url, c);
         if (r.getBody() == null) {
             return false;
         } else {
@@ -28,9 +28,9 @@ public class ServiceRessourceRepository {
      * @param parameters
      * @return
      */
-    private ResponseEntity<Ressource> postRequest(String url, Ressource r) {
+    private ResponseEntity<RessourceDTO> postRequest(String url, RessourceDTO r) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Ressource> res = restTemplate.postForObject(url, r, ResponseEntity.class);
+        ResponseEntity<RessourceDTO> res = restTemplate.postForObject(url, r, ResponseEntity.class);
         if (res.getStatusCode() != HttpStatus.CREATED) {
             // i can't access to reposirory !
             System.out.println("pb acces data");
@@ -41,13 +41,14 @@ public class ServiceRessourceRepository {
         return res;
     }
 
-    public Ressource findByTrackingId(String clientTid) {
+    public RessourceDTO findByTrackingId(String clientTid) {
         String url = UrlEndpoint.REST_REPO_RESSOURCE + " /search/byTrackingId?resTrackId=" + clientTid;
-        return (Ressource) getRequest(url).getBody();
+        return (RessourceDTO) getRequest(url).getBody();
     }
+
     private <T> ResponseEntity getRequest(String url) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Ressource> r = restTemplate.getForEntity(url, Ressource.class);
+        ResponseEntity<RessourceDTO> r = restTemplate.getForEntity(url, RessourceDTO.class);
         if (r.getStatusCode() != HttpStatus.OK) {
             // i can't access to reposirory !
             System.out.println("pb acces data");

@@ -2,7 +2,6 @@ package com.autohost.customer.controller;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,13 +30,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import entityDTO.db.Customer;
-import entityDTO.db.Ressource;
 import entityDTO.dto.CustomerDTO;
+import entityDTO.dto.ListCustomerDto;
 import entityDTO.dto.RessourceDTO;
 import entityDTO.dto.Status;
 import entityDTO.dto.UrlEndpoint;
-import entityDTO.utils.DtoConverter;
 
 @RestController
 public class CustomerController {
@@ -76,13 +73,12 @@ public class CustomerController {
             logger.info("Customer already existing in db");
             return "CUSTOMER_FOUND_IN_DB";
         } else {
-            Customer c = DtoConverter.customerDtoToCustomer(customerDTO);
             // setting tracking number
-            c.setTrackingId(RandomStringUtils.randomAlphanumeric(30));
-            cusRepo.save(c);
-            logger.info("saving new customer : {}", c);
+            customerDTO.setTrackingId(RandomStringUtils.randomAlphanumeric(30));
+            cusRepo.save(customerDTO);
+            logger.info("saving new customer : {}", customerDTO);
             // return unique identifier of this customer
-            return c.getTrackingId();
+            return customerDTO.getTrackingId();
         }
     }
 
@@ -105,15 +101,8 @@ public class CustomerController {
 
     @CrossOrigin(origins = "http://10.244.232.246:4200")
     @GetMapping("/customer/getall")
-    public List<CustomerDTO> listCustomer() {
-        List<Customer> lc = cusRepo.findAll();
-        List<CustomerDTO> lcdto = new ArrayList<>();
-        for (Customer c : lc) {
-            CustomerDTO cdto = DtoConverter.customerToCustomerDto(c);
-            lcdto.add(cdto);
-        }
-        // renvoi la liste des clientsDTO
-        return lcdto;
+    public ListCustomerDto listCustomer() {
+        return cusRepo.findAll();
 
     }
 
@@ -123,9 +112,8 @@ public class CustomerController {
      * to follow during the process the entity like a token passed from one to
      * another app
      *
-     * @param trackerIdClient
-     * @param trackerIdPlan
-     * @param trackerIdCustomer
+     * @param
+     *
      * @return
      * @throws IOException
      * @throws ClientProtocolException
@@ -135,7 +123,7 @@ public class CustomerController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         // verify if user exist
-        Customer c = cusRepo.findByTrackingId(res.getClientTid());
+        CustomerDTO c = cusRepo.findByTrackingId(res.getClientTid());
         // verify if plan exist
         if (c != null && res != null) {
             // Génère un code de suivi (trackingId) et sauvegarde la commande du client
@@ -143,8 +131,7 @@ public class CustomerController {
             res.setEvents(new HashMap<LocalTime, String>());
             res.getEvents().put(LocalTime.now(), UrlEndpoint.CUSTOMER_POST_ORDER);
             res.setStatus(Status.PENDING);
-            Ressource r = DtoConverter.ressourceDtoToRessource(res);
-            resRepo.save(r);
+            resRepo.save(res);
 
             // envoie la commande au manager
             RestTemplate restTemplate = new RestTemplate();
@@ -169,7 +156,7 @@ public class CustomerController {
         if (res != null || res.getTrackingId() != null || res.getIp() != null) {
             if (!res.getTrackingId().isEmpty() && !res.getIp().isEmpty()) {
                 logger.info("received ressource from manager : {}", res);
-                Ressource r = resRepo.findByTrackingId(res.getTrackingId());
+                RessourceDTO r = resRepo.findByTrackingId(res.getTrackingId());
                 r.setIp(res.getIp());
                 resRepo.save(r);
             }
