@@ -56,7 +56,7 @@ public class SendToClientTasklet implements Tasklet, StepExecutionListener {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<RessourceDTO> entity = new HttpEntity<>(res, headers);
         // renvoie au client l'entité avec un status à PENDING
-        restTemplate.postForEntity(UrlEndpoint.CUSTOMER_RECEIVE_ORDER, entity, RessourceDTO.class);
+        restTemplate.postForEntity(UrlEndpoint.CUSTOMER_RECEIVE_ORDER_ENDPOINT, entity, RessourceDTO.class);
         return RepeatStatus.FINISHED;
     }
 

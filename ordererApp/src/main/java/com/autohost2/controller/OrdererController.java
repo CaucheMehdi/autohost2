@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autohost2.listener.CustomSpringEvent;
 
-import entityDTO.dto.RessourceDTO;
+import entityDTO.RessourceDTO;
+
+
 
 /**
  * Controlleur Rest qui déclenche des jobs sur des appels rest

@@ -13,18 +13,18 @@ public interface CustomerRepo extends PagingAndSortingRepository<Customer, Long>
 
     @Override
     List<Customer> findAll();
-
-    Customer findByTrackingId(@Param("resTrackId") String trackingId);
-
     Boolean trackingId(String trackingId);
 
     @Override
     Customer save(Customer r);
+    void deleteByTrackingId(@Param("email") String email);
 
     Customer findByPhone(@Param("phone") String phone);
-
+    Customer findByTrackingId(@Param("resTrackId") String trackingId);
     Customer findByEmail(@Param("email") String email);
-
-    void deleteByTrackingId(@Param("email") String email);
+   
+    Boolean existsByPhone(String phone);
+    Boolean existsByEmail(String email);
+    Boolean existsByTrackingId(String trackingId);
 
 }

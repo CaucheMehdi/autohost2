@@ -25,9 +25,9 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
         <dependency>
-            <groupId>entityDTO</groupId>
+            <groupId>com.autohost</groupId>
             <artifactId>entityDTO</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 		<dependency>
             <groupId>mysql</groupId>

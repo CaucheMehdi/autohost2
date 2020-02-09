@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autohost.configurator.repository.ConfigurationRepository;
 
-import entityDTO.dto.RessourceDTO;
+import entityDTO.RessourceDTO;
+
+
 
 @RestController
 public class ConfiguratorController {

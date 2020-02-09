@@ -15,7 +15,7 @@ import entityDTO.dto.UrlEndpoint;
 public class ServiceCustomerRepository {
 
     public boolean existsByEmail(String email) {
-        String url = UrlEndpoint.REST_CUSTOMER_SEARCH_BY_EMAIL_ENDPOINT + email;
+        String url = UrlEndpoint.REST_CUSTOMER_EXIST_BY_EMAIL_ENDPOINT + email;
         ResponseEntity<CustomerDTO> response = getRequest(url);
         if (response.getBody() == null) {
             return false;
@@ -25,7 +25,7 @@ public class ServiceCustomerRepository {
     }
 
     public boolean existsByPhone(String phone) {
-        String url = REST_URL_CUSTOMER + "/search/byPhone?phone=" + phone;
+        String url = UrlEndpoint.REST_CUSTOMER_EXIST_BY_PHONE_ENDPOINT + phone;
         ResponseEntity<CustomerDTO> response = getRequest(url);
         if (response.getBody() == null) {
             return false;
@@ -35,7 +35,7 @@ public class ServiceCustomerRepository {
     }
 
     public boolean existByTrackingId(String trackingId) {
-        String url = REST_URL_CUSTOMER + "/search/existByTrackingId?trackingId=" + trackingId;
+        String url = 	UrlEndpoint.REST_CUSTOMER_EXIST_BY_TRACKING_ID_ENDPOINT + trackingId;
         ResponseEntity r = getRequest(url);
         if (r.getBody() == null) {
             return false;
@@ -46,7 +46,7 @@ public class ServiceCustomerRepository {
 
     public boolean save(CustomerDTO c) {
         // TODO Auto-generated method stub
-        String url = REST_URL_CUSTOMER + "/save";
+        String url = UrlEndpoint.REST_CUSTOMER_SAVE_ENDPOINT;
         ResponseEntity<CustomerDTO> r = postRequest(url, c);
         if (r.getBody() == null) {
             return false;
@@ -58,12 +58,12 @@ public class ServiceCustomerRepository {
 
     public ListCustomerDto findAll() {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForEntity(REST_URL_CUSTOMER + "/all", ListCustomerDto.class).getBody();
+        return restTemplate.getForEntity(UrlEndpoint.REST_CUSTOMER_GET_ALL_ENDPOINT , ListCustomerDto.class).getBody();
 
     }
 
     public void deleteByTrackerId(String trackingId) {
-        String url = UrlEndpoint.REST_REPO_ROOT + "/customer/delete";
+        String url = UrlEndpoint.;
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(url, trackingId);
     }
@@ -107,7 +107,7 @@ public class ServiceCustomerRepository {
     }
 
     public CustomerDTO findByTrackingId(String clientTid) {
-        String url = REST_URL_CUSTOMER + " /search/byTrackingId?resTrackId=" + clientTid;
+        String url = UrlEndpoint.REST_CUSTOMER_EXIST_BY_TRACKING_ID_ENDPOINT + clientTid;
         return (CustomerDTO) getRequest(url).getBody();
     }
 

@@ -15,31 +15,129 @@ import com.autohost.demo.repo.CustomerRepo;
 
 import entityDTO.dto.CustomerDTO;
 import entityDTO.dto.ListCustomerDto;
+import entityDTO.dto.MessageDto;
+import entityDTO.dto.UrlEndpoint;
 
+/**
+ * Rest conTroller for managing CUSTOMER entity
+ * 
+ * @author mehdi
+ *
+ */
 @RestController
 public class RepositoryController {
-    @Autowired
+    private static final String REST_REPOSITORY = "RestDAO Controller CUSTOMER_entity";
+	@Autowired
     CustomerRepo customerRepository;
+		
+	/**
+	 * CREATE CUSTOMER
+	 * @param msgreceived
+	 * @return
+	 */
+	@PostMapping(UrlEndpoint.REST_CUSTOMER_SAVE_MAPPING)
+    public ResponseEntity<MessageDto> saveCustomer(MessageDto msgreceived) {
+        Customer customer = customerRepository.save(customerDtoToCustomer((CustomerDTO) msgreceived.getObject()));
+        MessageDto msg = new MessageDto();
+        msg.setFrom(REST_REPOSITORY);
+        CustomerDTO customerDtoToBeSend = customerToCustomerDto(customer);
+        msg.setObject(customerDtoToBeSend);
+        return new ResponseEntity<>(msg, HttpStatus.CREATED);
+    }
 
-    @GetMapping("/customer/all")
-    public ResponseEntity<ListCustomerDto> getAllCustomer() {
-
+	/**
+	 * GET ALL CUSTOMER
+	 * @return
+	 */
+    @GetMapping(UrlEndpoint.REST_CUSTOMER_GET_ALL_MAPPING)
+    public ResponseEntity<MessageDto> getAllCustomer() {
         List<Customer> listCustomer = customerRepository.findAll();
-        List listCustomerDto = new ArrayList();
+        List<CustomerDTO> listCustomerDto = new ArrayList<>();
         ListCustomerDto l = new ListCustomerDto();
         for (Customer c : listCustomer) {
             listCustomerDto.add(customerToCustomerDto(c));
-        }
+        	}
         l.setListCustomerDto(listCustomerDto);
-        return new ResponseEntity<>(l, HttpStatus.ACCEPTED);
+        MessageDto msg = new MessageDto();
+        msg.setFrom(REST_REPOSITORY);
+        msg.setObject(l); 
+        return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
     }
+    
+    
+    /**
+     * EXIST BY EMAIL ?
+     * @param m
+     * @return
+     */
+    @SuppressWarnings("deprecation")
+	@PostMapping(UrlEndpoint. REST_CUSTOMER_EXIST_BY_EMAIL_MAPPING)
+    public ResponseEntity<MessageDto> existByEmail(MessageDto m) {
+        MessageDto msg = new MessageDto();
+    	msg.setFrom(REST_REPOSITORY);
+        CustomerDTO c = (CustomerDTO) m.getObject();
 
-    @PostMapping("/customer/save")
-    public ResponseEntity<CustomerDTO> saveCustomer(CustomerDTO c) {
-        customerRepository.save(customerDtoToCustomer(c));
-        return new ResponseEntity<>(c, HttpStatus.CREATED);
+        if( customerRepository.existsByEmail(c.getEmail())) {
+        	msg.setObject(new Boolean(true));
+        	return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
+        } 
+        else {
+        	msg.setObject(new Boolean(false));
+        	return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
+        }
     }
+    
+    /**
+     * EXIST BY PHONE ?
+     * @param m
+     * @return
+     */
+    @SuppressWarnings("deprecation")
+	@PostMapping(UrlEndpoint. REST_CUSTOMER_EXIST_BY_PHONE_MAPPING)
+    public ResponseEntity<MessageDto> existByPhone(MessageDto m) {
+        MessageDto msg = new MessageDto();
+    	msg.setFrom(REST_REPOSITORY);
+        CustomerDTO c = (CustomerDTO) m.getObject();
 
+        if( customerRepository.existsByPhone(c.getPhone())) {
+        	msg.setObject(new Boolean(true));
+        	return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
+        } 
+        else {
+        	msg.setObject(new Boolean(false));
+        	return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
+        }
+    }
+    
+    /**
+     * EXIST BY TRACKING ID ?
+     * @param m
+     * @return
+     */ 
+    @SuppressWarnings("deprecation")
+	@PostMapping(UrlEndpoint. REST_CUSTOMER_EXIST_BY_TRACKING_ID_MAPPING)
+    public ResponseEntity<MessageDto> existByTrackingId(MessageDto m) {
+        MessageDto msg = new MessageDto();
+    	msg.setFrom(REST_REPOSITORY);
+        CustomerDTO c = (CustomerDTO) m.getObject();
+
+        if( customerRepository.existsByTrackingId(c.getTrackingId())) {
+        	msg.setObject(new Boolean(true));
+        	return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
+        } 
+        else {
+        	msg.setObject(new Boolean(false));
+        	return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
+        }
+    }
+    
+    
+    
+   
+    
+    
+    /**OBJECT DTO CONVERTER**/
+    
     private CustomerDTO customerToCustomerDto(Customer c) {
         CustomerDTO cdto = new CustomerDTO();
         cdto.setEmail(c.getEmail());
